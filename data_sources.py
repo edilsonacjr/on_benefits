@@ -18,23 +18,23 @@ from sklearn.datasets import fetch_openml
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 
-def get_mnist(folder='data/'):
+def get_mnist(folder='mnist', path='data'):
 
-    path = Path(folder)
+    path = Path(path) / folder
     path.mkdir(parents=True, exist_ok=True)
     data = fetch_mldata('MNIST original')
 
     x = data.data
     y = data.target
 
-    np.save(path / 'mnist_data.npy', x)
-    np.save(path / 'mnist_target.npy', y)
+    np.save(path / 'data.npy', x)
+    np.save(path / 'target.npy', y)
     return x, y
 
 
-def get_olivetti(folder='data/'):
+def get_olivetti(folder='olivetti', path='data'):
 
-    path = Path(folder)
+    path = Path(path) / folder
     path.mkdir(parents=True, exist_ok=True)
 
     data = fetch_olivetti_faces()
@@ -42,14 +42,14 @@ def get_olivetti(folder='data/'):
     x = data.images.reshape((len(data.images), -1))
     y = data.target
 
-    np.save(path / 'olivetti_data.npy', x)
-    np.save(path / 'olivetti_target.npy', y)
+    np.save(path / 'data.npy', x)
+    np.save(path / 'target.npy', y)
     return x, y
 
 
-def get_newsgroups(folder='data/'):
+def get_newsgroups(folder='newsgroups', path='data'):
 
-    path = Path(folder)
+    path = Path(path) / folder
     path.mkdir(parents=True, exist_ok=True)
 
     tokenize = nltk.tokenize.RegexpTokenizer('(?u)\\b\\w\\w+\\b')
@@ -60,16 +60,15 @@ def get_newsgroups(folder='data/'):
     x = data.data
 
     x_transformed = TfidfVectorizer(tokenizer=tokenize.tokenize, stop_words=stopwords, min_df=5).fit_transform(x)
-    #x_transformed = x_transformed.toarray()
 
-    np.save(path / 'newsgroups_data.npy', x_transformed)
-    np.save(path / 'newsgroups_target.npy', y)
+    np.save(path / 'data.npy', x_transformed)
+    np.save(path / 'target.npy', y)
     return x, y
 
 
-def get_coil(origin_path='data/coil-20-proc/*.png', folder='data/'):
+def get_coil(origin_path='data/coil-20-proc/*.png', folder='coil', path='data'):
 
-    path = Path(folder)
+    path = Path(path) / folder
     path.mkdir(parents=True, exist_ok=True)
 
     original_pic = []
@@ -84,22 +83,22 @@ def get_coil(origin_path='data/coil-20-proc/*.png', folder='data/'):
     x = im.reshape((len(im), -1))
     y = np.array(y)
 
-    np.save(path / 'coil_data.npy', x)
-    np.save(path / 'coil_target.npy', y)
+    np.save(path / 'data.npy', x)
+    np.save(path / 'target.npy', y)
     return x, y
 
 
-def get_fashion(folder='data/'):
+def get_fashion(folder='fashion', path='data'):
 
-    path = Path(folder)
+    path = Path(path) / folder
     path.mkdir(parents=True, exist_ok=True)
     data = fetch_openml('Fashion-MNIST')
 
     x = data.data
     y = data.target
 
-    np.save(path / 'fashion_data.npy', x)
-    np.save(path / 'fashion_target.npy', y)
+    np.save(path / 'data.npy', x)
+    np.save(path / 'target.npy', y)
     return x, y
 
 
@@ -108,6 +107,7 @@ def main():
     get_olivetti()
     get_newsgroups()
     get_coil()
+    get_fashion()
 
 
 if __name__ == '__main__':
